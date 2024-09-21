@@ -1,99 +1,52 @@
-/*Автор Осепошвили Всеволод 1 Курс МФ МГТУ Им. Баумана*/
-#include <iostream>
-#include <cstring>
 #include <math.h>
-#include "Lesson.h"
-using namespace std;
+#include <cstdio> 
+#include <cstring>
+#include <iostream>
+#include <stdlib.h>
 
-int main()
+
+double calculations(double argument1,char option, double argument2)
 {
-    int res;
-    char stri[50],znak,format[50];
-    float param1,param2;
-    printf("Это калькулятор на C++ умеющий складывать, вычитать, умноножать и много другое.\nСправка по работе с программой --help/-h.\nДля начала работы введите команду...");
-    cin>>stri;
-    if(strcmp("-c",stri)==0 || strcmp("--calc",stri)==0){
-        printf("Выберите формат вывода...\n");
-        cin>>format;
-        printf("Введите первый операнд...\n");
-        cin>>param1;
-        printf("Введите второй операнд...\n");
-        cin>>param2;
-        printf("Введите операцию...");
-        cin>>znak;
-        switch (znak)
-        {
-        case '+':
-            if(strcmp("-i",format)==0 || strcmp("--int",format)==0){
-                printf("Результат сложения чисел в десятичной:\n");
-                cout<<param1+param2;
-            } else if(strcmp("-x",format)==0 || strcmp("--hex",format)==0){
-                printf("Результат сложения чисел в шеснадцатиричной системе:\n");
-                res = param1+param2;
-                cout<<std::hex<<res;
-            }
-            break;
-        case '-':
-            if(strcmp("-i",format)==0 || strcmp("--int",format)==0){
-                printf("Результат вычитания чисел в десятичной:\n");
-                cout<<param1-param2;
-            } else if(strcmp("-x",format)==0 || strcmp("--hex",format)==0){
-                printf("Результат вычитания чисел в шеснадцатиричной системе:\n");
-                res = param1-param2;
-                cout<<std::hex<<res;
-            }
-            break;
-        case '*':
-            if(strcmp("-i",format)==0 || strcmp("--int",format)==0){
-                printf("Результат умножения чисел в десятичной:\n");
-                cout<<param1*param2;
-            } else if(strcmp("-x",format)==0 || strcmp("--hex",format)==0){
-                printf("Результат умножения чисел в шеснадцатиричной системе:\n");
-                res = param1*param2;
-                cout<<std::hex<<res;
-            }
-            break;
-        case '/':
-            if(strcmp("-i",format)==0 || strcmp("--int",format)==0){
-                printf("Результат деления чисел в десятичной:\n");
-                cout<<param1/param2;
-            } else if(strcmp("-x",format)==0 || strcmp("--hex",format)==0){
-                printf("Результат деления чисел в шеснадцатиричной системе:\n");
-                res = param1/param2;
-                cout<<std::hex<<res;
-            }
-            break;
-        case '%':
-            if(strcmp("-i",format)==0 || strcmp("--int",format)==0){
-                printf("Результат нахождения остатка чисел в десятичной:\n");
-                cout<<fmod(param1,param2);
-            } else if(strcmp("-x",format)==0 || strcmp("--hex",format)==0){
-                printf("Результат нахождения остатка в шеснадцатиричной системе:\n");
-                res = fmod(param1,param2);
-                cout<<std::hex<<res;
-            }
-            break;
-        case 'a':
-            if((param1==1 || param1==0) && (param2==1 || param2==0)){
-                cout<<param1 && param2;
-            } else printf("Числа не подходят для данной операции, попробуйте сначало.");
-            break;
-        case 'o':
-            if((param1==1 || param1==0) && (param2==1 || param2==0)){
-                cout<<param1||param2;
-            } else printf("Числа не подходят для данной операции, попробуйте сначало.");
-            break;
-        
-        default:
-            printf("Выбрана не существующая операция, пожалуйста попробуйте снова");
-            break;
-        }
+    switch(option)
+    {
+        case '+': return argument1 + argument2;
+        case '-': return argument1 - argument2;
+        case '*': return argument1 * argument2;
+        case '/': if(argument2 == 0){
+            printf("Error div on zero fo help check -h/--help\n");
+        }else return argument1 / argument2;
+        case '%': if(argument2 == 0){
+            printf("Error div on zero fo help check -h/--help\n");
+        }else return argument1 / argument2;
+        case 'a': if((argument1==1 || argument1==0) && (argument2==1 ||argument2==0)){
+            return argument1 && argument2;
+        } else printf("Error\n");
+        case 'o': if((argument1==1 || argument1==0) && (argument2==1 ||argument2==0)){
+            return argument1 || argument2;
+        } else printf("Error\n");
+    }
+}
 
-
-    } else if (strcmp("-h",stri)==0 || strcmp("--help",stri)==0){
-        printf("Для начала работы нужно ввести --calc/-c.\nДля указания формата вывода:\n --int/-i для десятичной\n--hex/-x для шестанадцатиричной.\nДоступные операции: +, -, *, /, %, a(and), o(or)");
-    } else{
-        printf("Ошибка, приглашаю воспользоватьcя справкой с помощью --help/-h.");
+int main(int argc, char *argv[])
+{
+    printf("Culculator v0.1\nFor help use -h/--help\nFor work use -c/--calc\n");
+    if(strcmp(argv[1],"--help") == 0 || strcmp(argv[1],"-h") == 0)
+    {
+        printf("Structure [Arg1] [option] [Arg2] [Output Type]\n Commands: -c/--calc -x/--hex -i/--int\n Options: + - * / % a(and) o(or)\n");
+    }
+    if((strcmp(argv[1],"--calc") == 0 || strcmp(argv[1],"-c") == 0) && (strcmp(argv[5],"-x") == 0 || strcmp(argv[5],"--hex") == 0))
+    {
+        double arg1 = atof(argv[2]);
+        char* option = argv[3];
+        double arg2 = atof(argv[4]);
+        int res = calculations(arg1,option[0],arg2);
+        printf("%x",res);
+    } else if((strcmp(argv[1],"--calc") == 0 || strcmp(argv[1],"-c") == 0) && (strcmp(argv[5],"-i") == 0 || strcmp(argv[5],"--int") == 0)) {
+       double arg1 = atof(argv[2]);
+        char* option = argv[3];
+        double arg2 = atof(argv[4]);
+        double res = calculations(arg1,option[0],arg2);
+        printf("%f\n",res);
     }
     return 0;
 }
